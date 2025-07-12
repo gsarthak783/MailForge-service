@@ -2,12 +2,14 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const verifyAdminKey = require('../middlewares/adminKey.middleware');
 const asyncHandler = require('express-async-handler');
+const {tokenLimiter} = require('../utils/rateLimiter')
 require('dotenv').config();
 
 const router = express.Router();
 
 router.post(
   '/generate-token',
+  tokenLimiter,
   verifyAdminKey,
   asyncHandler(async (req, res) => {
     const { project, role } = req.body;
